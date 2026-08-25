@@ -8,15 +8,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     
-    // We fetch the webhook URL and secret from the server's environment variables
-    // so it is NEVER exposed to the browser.
-    const webhookUrl = process.env.CONNECT_CLUB_WEBHOOK_URL || "http://localhost:3000/api/webhooks/external-registration";
+    // We fetch the webhook URL from the server's environment variables
+    const webhookUrl = process.env.CONNECT_CLUB_WEBHOOK_URL;
     const secret = process.env.CONNECT_CLUB_WEBHOOK_SECRET || "local_dev_secret_12345";
-
-    if (!secret) {
-      console.error("Missing CONNECT_CLUB_WEBHOOK_SECRET in environment variables.");
-      return NextResponse.json({ error: "Server Configuration Error" }, { status: 500 });
-    }
 
     // --- SEND EMAIL CONFIRMATION ---
     if (body.email && body.name) {
@@ -39,24 +33,30 @@ export async function POST(request: Request) {
       }
     }
 
-    const response = await fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${secret}`
-      },
-      body: JSON.stringify({
-        rollNo: body.rollNo,
-        eventId: body.eventId,
-        eventTitle: body.eventTitle,
-        ticketId: body.ticketId
-      })
-    });
+    // --- WEBHOOK PING ---
+    // Only ping the webhook if it's explicitly configured (prevents hanging on Vercel)
+    if (webhookUrl && !webhookUrl.includes("localhost")) {
+      try {
+        const response = await fetch(webhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${secret}`
+          },
+          body: JSON.stringify({
+            rollNo: body.rollNo,
+            eventId: body.eventId,
+            eventTitle: body.eventTitle,
+            ticketId: body.ticketId
+          })
+        });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Connect Club Webhook Failed:", errorText);
-      return NextResponse.json({ error: "Connect Club Webhook Failed" }, { status: 502 });
+        if (!response.ok) {
+          console.error("Connect Club Webhook Failed:", await response.text());
+        }
+      } catch (webhookError) {
+        console.error("Connect Club Webhook Network Error:", webhookError);
+      }
     }
 
     return NextResponse.json({ success: true });

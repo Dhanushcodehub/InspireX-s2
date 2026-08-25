@@ -1,0 +1,196 @@
+.brain-network-wrapper {
+  position: relative;
+  min-height: 200vh; /* Faster animation length */
+  background: transparent;
+  z-index: 2;
+}
+
+.brain-network-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG Lines */
+.brain-lines-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin-top: 8vh; /* Shift down to balance header */
+  pointer-events: none;
+  z-index: 1;
+}
+
+.brain-line {
+  fill: none;
+  stroke-width: 3; /* Restored thick scaling stroke */
+  stroke-dasharray: 100; /* Kept for perfect 0-100 pathLength math */
+  /* Glow filter defined in the SVG */
+  filter: drop-shadow(0 0 10px rgba(0, 150, 255, 1));
+  opacity: 0.9;
+  /* The stroke-dashoffset is controlled inline by React */
+}
+
+/* Central Brain */
+.brain-center-container {
+  position: absolute;
+  z-index: 3;
+  margin-top: 8vh; /* Shift down to balance header */
+  animation: brainFloat 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.brain-image {
+  width: clamp(300px, 45vw, 650px);
+  height: auto;
+  object-fit: contain;
+  /* Optional subtle glow around the image itself */
+  filter: drop-shadow(0 0 60px rgba(0, 85, 255, 0.4));
+}
+
+@keyframes brainFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(1.5deg); }
+}
+
+/* Section Header */
+.brain-section-header {
+  position: absolute;
+  top: 10vh;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 4;
+  opacity: 0;
+  animation: fadeDown 1s ease 0.5s forwards;
+}
+
+.brain-section-header h2 {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-weight: 800;
+  font-size: clamp(32px, 4vw, 56px);
+  color: var(--paper, #fff);
+  margin: 0 0 10px 0;
+  letter-spacing: -0.02em;
+}
+
+.brain-section-header h2 span {
+  background: linear-gradient(90deg, #0055ff, #00e5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brain-section-header p {
+  color: var(--muted, #a1a1aa);
+  font-size: 16px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cards */
+.brain-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  margin-top: 8vh; /* Shift down to balance header */
+  
+  background: rgba(20, 20, 25, 0.4);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 20px;
+  
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 280px;
+
+  
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  /* transform and opacity are controlled inline by React */
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.brain-card.align-right {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.brain-card.align-left {
+  flex-direction: row;
+  text-align: left;
+}
+
+.brain-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 85, 255, 0.15);
+  border: 1px solid rgba(0, 85, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ember-2, #00e5ff);
+  box-shadow: 0 0 20px rgba(0, 85, 255, 0.2);
+}
+
+.brain-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brain-card-name {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--paper, #fff);
+  margin: 0 0 4px 0;
+  letter-spacing: -0.01em;
+}
+
+.brain-card-stat {
+  font-family: var(--font-mono, 'Inter', monospace);
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--ember-2, #00e5ff); /* Fallback to cyan */
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .brain-card {
+    width: 200px;
+    padding: 12px;
+    gap: 10px;
+  }
+  .brain-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .brain-card-name {
+    font-size: 13px;
+  }
+  .brain-card-stat {
+    font-size: 10px;
+  }
+}

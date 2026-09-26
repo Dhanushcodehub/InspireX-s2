@@ -16,6 +16,7 @@ export default function Register() {
     college: '',
     branch: '',
     year: '',
+    section: '',
     regType: 'solo',
     groupAction: 'create',
     groupCode: ''
@@ -50,6 +51,7 @@ export default function Register() {
         branch: formData.branch,
         rollNo: formData.roll,
         year: formData.year,
+        section: formData.section,
         email: formData.email
       });
       
@@ -225,17 +227,30 @@ export default function Register() {
                     </div>
                   </div>
 
-                  <div className="field" id="field-year">
-                    <label htmlFor="year">Year of Study *</label>
-                    <select id="year" value={formData.year} onChange={handleInputChange} required>
-                      <option value="">Select year</option>
-                      <option>1st Year</option>
-                      <option>2nd Year</option>
-                      <option>3rd Year</option>
-                      <option>4th Year</option>
-                      <option>Other / Working</option>
-                    </select>
-                    <span className="field-error">Select your year</span>
+                  <div className="field-row" style={{ marginBottom: "0" }}>
+                    <div className="field" id="field-section">
+                      <label htmlFor="section">Section *</label>
+                      <select id="section" value={formData.section} onChange={handleInputChange} required>
+                        <option value="">Select section</option>
+                        {['A','B','C','D','E','F','G','H','I','J','K','L','M','N'].map(s => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                      <span className="field-error">Select your section</span>
+                    </div>
+
+                    <div className="field" id="field-year">
+                      <label htmlFor="year">Year of Study *</label>
+                      <select id="year" value={formData.year} onChange={handleInputChange} required>
+                        <option value="">Select year</option>
+                        <option>1st Year</option>
+                        <option>2nd Year</option>
+                        <option>3rd Year</option>
+                        <option>4th Year</option>
+                        <option>Other / Working</option>
+                      </select>
+                      <span className="field-error">Select your year</span>
+                    </div>
                   </div>
 
                   <label style={{ fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "8px", display: "block" }}>Registration Type *</label>
@@ -298,7 +313,7 @@ export default function Register() {
                   <div className="review-item"><span>Email</span><span>{formData.email}</span></div>
                   <div className="review-item"><span>Phone</span><span>{formData.phone}</span></div>
                   <div className="review-item"><span>College</span><span>{formData.college}</span></div>
-                  <div className="review-item"><span>Branch &amp; Year</span><span>{formData.branch} - {formData.year}</span></div>
+                  <div className="review-item"><span>Branch, Section & Year</span><span>{formData.branch} - Sec {formData.section} - {formData.year}</span></div>
                   
                   {formData.regType === 'group' && (
                     <div className="review-item" id="rev-group-row">

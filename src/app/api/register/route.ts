@@ -33,31 +33,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // --- WEBHOOK PING ---
-    // Only ping the webhook if it's explicitly configured (prevents hanging on Vercel)
-    if (webhookUrl && !webhookUrl.includes("localhost")) {
-      try {
-        const response = await fetch(webhookUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${secret}`
-          },
-          body: JSON.stringify({
-            rollNo: body.rollNo,
-            eventId: body.eventId,
-            eventTitle: body.eventTitle,
-            ticketId: body.ticketId
-          })
-        });
 
-        if (!response.ok) {
-          console.error("Connect Club Webhook Failed:", await response.text());
-        }
-      } catch (webhookError) {
-        console.error("Connect Club Webhook Network Error:", webhookError);
-      }
-    }
 
     return NextResponse.json({ success: true });
     

@@ -20,9 +20,26 @@ export const checkDuplicateRegistration = async (rollNo) => {
   const registrationsRef = collection(db, "registrations");
   const q = query(registrationsRef, where("rollNo", "==", standardizedRoll));
   
-  const querySnapshot = await getDocs(q);
-  return !querySnapshot.empty;
+  try {
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  } catch (error) {
+    console.error("InspireX DB Read Error:", error);
+    throw new Error("InspireX DB Read Error: " + error.message);
+  }
 };
+
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+// Connect Club Public Client Config
+const connectClubConfig = {
+  apiKey: "AIzaSyDKFGx9mMCgu3mTvIrmJ-BrCtxaznFq3WQ",
+  authDomain: "connect-club-vce-2026.firebaseapp.com",
+  projectId: "connect-club-vce-2026",
+};
+const ccApp = initializeApp(connectClubConfig, "connect-club-app");
+const ccDb = getFirestore(ccApp);
 
 /**
  * Submits a new registration to Firestore.
@@ -30,48 +47,69 @@ export const checkDuplicateRegistration = async (rollNo) => {
  * @returns {Promise<string>} The new document ID
  */
 export const submitRegistration = async (formData) => {
-  const { name, branch, rollNo, year, email } = formData;
+  const { name, branch, rollNo, year, section, email } = formData;
   
   // 1. Standardize Data
   const standardizedRoll = standardizeRollNo(rollNo);
 
-  // 2. Duplicate Check
+  // 2. Duplicate Check in InspireX DB
   const isDuplicate = await checkDuplicateRegistration(standardizedRoll);
   
   if (isDuplicate) {
     throw new Error("This Roll Number is already registered for InspireX Season 2!");
   }
 
-  // 3. Save to Firestore
-  const docRef = await addDoc(collection(db, "registrations"), {
-    name: name,
-    branch: branch,
-    rollNo: standardizedRoll,
-    year: year,
-    email: email || "", // optional
-    registeredAt: serverTimestamp()
-  });
+  // 3. Save to InspireX Firestore
+  let docRef;
+  try {
+    docRef = await addDoc(collection(db, "registrations"), {
+      name: name,
+      branch: branch,
+      rollNo: standardizedRoll,
+      year: year,
+      section: (section || "").toUpperCase().trim(),
+      email: email || "",
+      registeredAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error("InspireX DB Error:", error);
+    throw new Error("InspireX Database Error: " + error.message);
+  }
 
-  // 4. Notify Connect Club via our new secure internal Webhook Route
+  // 4. Send Confirmation Email via API (No webhooks)
   try {
     await fetch("/api/register", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         rollNo: standardizedRoll, 
-        eventId: "inspirex-s2",
-        eventTitle: "InspireX Season 2",
-        ticketId: docRef.id,
         name: name,
         email: email,
-        branch: branch
+        branch: branch,
+        ticketId: docRef.id
       })
     });
-    console.log("Successfully notified Connect Club via secure API!");
   } catch (error) {
-    console.error("Failed to notify Connect Club:", error);
+    console.error("Failed to send email:", error);
+  }
+
+  // 5. Write to Connect Club external_registrations inbox
+  try {
+    await addDoc(collection(ccDb, "external_registrations"), {
+      eventId: "inspirex-s2", // Must match exactly
+      eventTitle: "InspireX Season 2",
+      rollNo: standardizedRoll,
+      name: name,
+      email: email || "",
+      phone: formData.phone || "", // If available
+      registeredAt: serverTimestamp(),
+      status: "approved", // Auto-approved
+      originalTicketId: docRef.id // Store the InspireX ticket ID for reference
+    });
+    console.log("Successfully sent to Connect Club inbox!");
+  } catch (error) {
+    console.error("Failed to write to Connect Club inbox:", error);
+    // Don't fail the registration if the CC sync fails
   }
 
   return docRef.id;

@@ -49,7 +49,7 @@ export default function Home() {
 
             <div className="hero-actions">
               <Link href="/register" className="btn btn-primary" id="heroRegisterBtn">
-                View Registration
+                Event Concluded
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </Link>
               <a href="#speakers" className="secondary-btn">Explore Lineup</a>
@@ -294,7 +294,7 @@ export default function Home() {
             </div>
             <div className="faq-item">
               <button className="faq-q">Is there a registration fee?<span className="plus"></span></button>
-              <div className="faq-a"><p>Add your fee details here, or state clearly that entry is free for this edition.</p></div>
+              <div className="faq-a"><p>Registration for Season Two was ₹499. Registration is now closed because the event took place on 13 September 2026.</p></div>
             </div>
             <div className="faq-item">
               <button className="faq-q">Will certificates be provided?<span className="plus"></span></button>
@@ -318,7 +318,7 @@ export default function Home() {
           <div className="reveal">
             <div className="eyebrow" style={{ justifyContent: "center" }}>Secure Your Spot</div>
             <h2>Ready to Join the <span>Movement?</span></h2>
-            <p>Takes under a minute. You'll get a confirmation with your entry pass. Seats are limited — don't miss out.</p>
+            <p>Season Two took place on 13 September 2026. Registration is now closed.</p>
             <div className="reg-cta-pills">
               <span className="reg-cta-pill">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
@@ -333,8 +333,8 @@ export default function Home() {
                 Open to All Students
               </span>
             </div>
-            <Link href="/register" className="btn btn-primary">
-              View Event Details
+            <Link href="/" className="btn btn-primary">
+             Back to Event Home
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </Link>
           </div>

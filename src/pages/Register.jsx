@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
 export default function Register() {
+  const registrationClosed = Date.now() > new Date('2026-09-13T23:59:59+05:30').getTime();
   const [currentStep, setCurrentStep] = useState(1);
   const [registrationId, setRegistrationId] = useState('');
   
@@ -115,7 +116,9 @@ export default function Register() {
               Secure<br />Your<br /><span>Spot</span>
             </h1>
             <p className="reg-subtext">
-              Join 1,000+ students, founders, and thinkers for a day of real talks from people who've actually done it. No theory — just honest stories and sharp ideas.
+              {registrationClosed
+                ? "InspireX Season 2 has concluded. Registration is no longer available."
+                : "Join 1,000+ students, founders, and thinkers for a day of real talks from people who've actually done it. No theory — just honest stories and sharp ideas."}
             </p>
           </div>
 
@@ -364,8 +367,8 @@ export default function Register() {
                 
                 <div className="btn-group">
                   <button type="button" className="btn secondary-btn" onClick={() => setCurrentStep(2)} disabled={isSubmitting}>Back</button>
-                  <button type="button" className="btn btn-primary submit-btn" id="btnPayNow" onClick={handlePayment} disabled={isSubmitting}>
-                    {isSubmitting ? "Processing..." : "I have paid ₹499"}
+                  <button type="button" className="btn btn-primary submit-btn" id="btnPayNow" onClick={handlePayment} disabled={isSubmitting || registrationClosed}>
+                    {registrationClosed ? "Registration closed" : isSubmitting ? "Processing..." : "I have paid ₹499"}
                   </button>
                 </div>
               </div>

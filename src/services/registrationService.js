@@ -11,6 +11,7 @@ import {
 import { ccDb, db } from "../firebase";
 
 const EVENT_ID = "inspirex-s2";
+const EVENT_DATE = new Date("2026-09-13T23:59:59+05:30");
 
 export const standardizeRollNo = (value) =>
   typeof value === "string" ? value.replace(/\s+/g, "").toUpperCase() : "";
@@ -47,6 +48,10 @@ const registrationDocumentId = (rollNo) =>
   `${EVENT_ID}_${rollNo.replace(/[^A-Z0-9]/g, "_")}`;
 
 export const submitRegistration = async (formData) => {
+  if (Date.now() > EVENT_DATE.getTime()) {
+    throw new Error("Registration for InspireX Season 2 is closed.");
+  }
+
   const name = typeof formData.name === "string" ? formData.name.trim() : "";
   const branch = typeof formData.branch === "string" ? formData.branch.trim() : "";
   const rollNo = standardizeRollNo(formData.rollNo);

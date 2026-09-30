@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — InspireX Season 2 | Connect Club</title>
+<meta name="description" content="Register for InspireX Season 2 by Connect Club. Secure your spot at the flagship speaker event — 13 September 2026, Vardhaman College of Engineering.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Inter:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ============================================================
+   REGISTER PAGE — SPECIFIC STYLES
+============================================================ */
+
+/* Page fade-in (loader skipped on sub-pages) */
+body {
+  animation: regFadeIn 0.55s var(--ease) both;
+}
+@keyframes regFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SPLIT LAYOUT ── */
+.reg-layout {
+  height: 100vh;
+  overflow: hidden;
+  padding-top: 76px; /* nav height */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative; z-index: 1;
+}
+
+/* ── LEFT PANEL — BRANDING ── */
+.reg-left {
+  background: linear-gradient(160deg, var(--ink-soft) 0%, var(--ink) 100%);
+  border-right: 1px solid var(--line);
+  padding: 40px 52px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; height: 100%;
+  overflow-y: auto;
+}
+.reg-left::-webkit-scrollbar { display: none; }
+.reg-left { -ms-overflow-style: none; scrollbar-width: none; }
+/* ambient glow orbs inside left panel */
+.reg-left::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(55% 45% at 20% 80%, rgba(255,92,40,0.16), transparent 65%),
+    radial-gradient(40% 35% at 85% 10%, rgba(110,242,192,0.09), transparent 65%);
+  pointer-events: none;
+}
+.reg-left-content { position: relative; z-index: 1; }
+.reg-brand-logo { margin-bottom: 24px; }
+.reg-heading {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(36px, 4.5vw, 58px);
+  letter-spacing: -0.025em; text-transform: uppercase; line-height: 0.95;
+  margin-bottom: 12px;
+}
+.reg-heading span { color: var(--ember-2); }
+.reg-subtext { color: var(--muted); font-size: 15px; line-height: 1.72; max-width: 380px; margin-bottom: 24px; }
+
+/* Event detail rows */
+.reg-details { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+.reg-detail-row {
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.reg-detail-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--ink-card); border: 1px solid var(--line-hi);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ember-2); flex-shrink: 0;
+}
+.reg-detail-body { font-size: 14px; }
+.reg-detail-body strong { display: block; color: var(--paper); font-weight: 600; margin-bottom: 2px; }
+.reg-detail-body span  { color: var(--muted); }
+
+/* Mini countdown */
+.reg-countdown { display: flex; gap: 12px; }
+.reg-count-box {
+  text-align: center;
+  background: rgba(22,22,26,0.8);
+  border: 1px solid var(--line-hi); border-radius: 12px;
+  padding: 12px 16px 8px;
+  backdrop-filter: blur(8px);
+}
+.reg-count-box .num {
+  font-family: var(--font-mono); font-weight: 700; font-size: 24px; color: var(--paper);
+  transition: transform 0.2s var(--ease-spring), color 0.2s;
+  display: block;
+}
+.reg-count-box .num.tick { transform: scale(1.18); color: var(--ember-2); }
+.reg-count-box .lbl {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.1em; color: var(--muted-2);
+  text-transform: uppercase; margin-top: 4px;
+}
+
+/* Bottom socials */
+.reg-left-footer { position: relative; z-index: 1; }
+.reg-left-footer p { font-family: var(--font-mono); font-size: 11px; color: var(--muted-2); margin-bottom: 12px; }
+
+/* ── RIGHT PANEL — FORM ── */
+.reg-right {
+  background: transparent;
+  padding: 40px 52px;
+  overflow-y: auto; height: 100%;
+  display: flex; align-items: flex-start; justify-content: center;
+}
+.reg-right::-webkit-scrollbar { display: none; }
+.reg-right { -ms-overflow-style: none; scrollbar-width: none; }
+.reg-form-wrap {
+  width: 100%;
+  max-width: 520px;
+}
+.reg-form-eyebrow { margin-bottom: 28px; }
+.reg-form-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(22px, 3vw, 34px); letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.reg-form-sub { color: var(--muted); font-size: 14px; }
+
+/* Form card */
+.form-card {
+  background: var(--ink-card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 24px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.form-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--ember), var(--ember-2), var(--volt));
+}
+
+/* Field groups */
+.field-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 0; }
+.field {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 14px;
+  position: relative;
+}
+.field label {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.field:focus-within label { color: var(--ember-2); }
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--ink-soft);
+  border: 1px solid var(--line-hi);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--paper); font-size: 14px;
+  outline: none;
+  transition: border-color 0.28s var(--ease), box-shadow 0.28s var(--ease), background 0.28s;
+  width: 100%;
+}
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239B98A3' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  cursor: pointer;
+}
+.field select option { background: var(--ink-card); }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted-2); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--ember-2);
+  box-shadow: 0 0 0 3px rgba(255,92,40,0.12);
+  background: var(--ink-card);
+}
+/* Validation states */
+.field.has-error input,
+.field.has-error select { border-color: #ff4040 !important; box-shadow: 0 0 0 3px rgba(255,64,64,0.1) !important; }
+.field.is-valid input,
+.field.is-valid select { border-color: var(--volt) !important; box-shadow: 0 0 0 3px rgba(110,242,192,0.1) !important; }
+.field-error {
+  font-size: 12px; color: #ff6060; font-family: var(--font-mono);
+  position: absolute; bottom: -18px; left: 0;
+  opacity: 0; transform: translateY(-4px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.field.has-error .field-error { opacity: 1; transform: translateY(0); }
+.field-check {
+  position: absolute; right: 14px; bottom: 14px;
+  color: var(--volt); opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+}
+.field.is-valid .field-check { opacity: 1; }
+
+/* Textarea */
+.field textarea { resize: vertical; min-height: 90px; }
+
+/* Submit button */
+.submit-btn {
+  width: 100%; justify-content: center; margin-top: 8px;
+  font-size: 15px; padding: 18px 24px;
+}
+.submit-btn.loading {
+  pointer-events: none; opacity: 0.7;
+}
+
+/* Success state */
+.success-state {
+  display: none;
+  flex-direction: column; align-items: center;
+  text-align: center; padding: 48px 24px;
+  gap: 16px;
+}
+.success-state.show { display: flex; }
+.success-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(110,242,192,0.12);
+  border: 1px solid rgba(110,242,192,0.35);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--volt);
+  animation: successPop 0.6s var(--ease-spring) both;
+}
+@keyframes successPop {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.success-state h3 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 24px; letter-spacing: -0.01em;
+}
+.success-state p { color: var(--muted); font-size: 14px; max-width: 320px; line-height: 1.7; }
+.success-state a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 13px; color: var(--ember-2);
+  border-bottom: 1px solid rgba(255,138,91,0.4);
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.success-state a:hover { color: var(--ember); border-color: var(--ember); }
+
+/* Seats fill bar */
+.seats-widget { margin-top: 24px; }
+.seats-label {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.seats-label span { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.seats-label b { font-family: var(--font-mono); font-size: 12px; color: var(--ember-2); }
+.fill-bar-track {
+  height: 6px; border-radius: 6px;
+  background: var(--ink-card-hi); overflow: hidden;
+}
+.fill-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--ember), var(--ember-2));
+  border-radius: 6px;
+  transition: width 1.6s var(--ease);
+}
+
+/* Perks list below the form */
+.reg-perks {
+  display: flex; flex-direction: column; gap: 14px;
+  margin-top: 28px;
+}
+.reg-perk {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14px; color: var(--muted);
+}
+.reg-perk svg { color: var(--volt); flex-shrink: 0; margin-top: 1px; }
+
+/* ── MULTI-STEP WIZARD ── */
+.wizard-progress {
+  display: flex; justify-content: space-between; margin-bottom: 24px; position: relative;
+}
+.wizard-progress::before {
+  content: ''; position: absolute; top: 14px; left: 15px; right: 15px; height: 2px;
+  background: var(--line); z-index: 0;
+}
+.wizard-step-dot {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--ink-soft); border: 2px solid var(--line-hi);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--muted);
+  position: relative; z-index: 1; transition: all 0.3s;
+}
+.wizard-step-dot.active { border-color: var(--ember-2); color: var(--paper); box-shadow: 0 0 12px rgba(255,92,40,0.3); }
+.wizard-step-dot.completed { background: var(--ember-2); border-color: var(--ember-2); color: var(--ink); }
+
+.wizard-step { display: none; animation: fadeInStep 0.4s var(--ease) forwards; }
+.wizard-step.active { display: block; }
+@keyframes fadeInStep { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Group Toggle */
+.radio-group { display: flex; gap: 12px; margin-bottom: 16px; }
+.radio-label {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px; border: 1px solid var(--line-hi); border-radius: 12px;
+  background: var(--ink-soft); cursor: pointer; transition: all 0.2s;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+}
+.radio-label input { display: none; }
+.radio-label:has(input:checked) { border-color: var(--ember-2); color: var(--ember-2); background: rgba(255,92,40,0.05); }
+
+#groupLogicWrap { display: none; background: rgba(110,242,192,0.05); border: 1px dashed rgba(110,242,192,0.3); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.group-status { font-family: var(--font-mono); font-size: 11px; color: var(--volt); margin-top: 8px; }
+.price-display {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px; background: rgba(255,92,40,0.08); border-radius: 12px; margin-bottom: 20px;
+  border: 1px solid rgba(255,92,40,0.2);
+}
+.price-val { font-family: var(--font-mono); font-size: 24px; font-weight: 700; color: var(--paper); }
+.price-val.free { color: var(--volt); }
+
+/* Review Step */
+.review-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.review-item { display: flex; justify-content: space-between; font-size: 13px; border-bottom: 1px dashed var(--line-hi); padding-bottom: 8px; }
+.review-item span:first-child { color: var(--muted); }
+.review-item span:last-child { color: var(--paper); font-weight: 600; text-align: right; }
+
+/* Payment Mock */
+.mock-payment { text-align: center; padding: 20px; border: 1px solid var(--line-hi); border-radius: 16px; margin-bottom: 24px; background: var(--ink-soft); }
+.mock-qr { width: 140px; height: 140px; margin: 0 auto 16px; background: #fff; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+.mock-qr img { width: 120px; opacity: 0.8; }
+
+/* Final Ticket */
+.ticket-card {
+  background: linear-gradient(145deg, #11141c, #0a0d14); border: 1px solid var(--line-hi);
+  border-radius: 20px; padding: 24px; position: relative; overflow: hidden; margin-bottom: 24px;
+}
+.ticket-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px; background: var(--ember-2); }
+.ticket-header { font-family: var(--font-display); font-weight: 900; font-size: 20px; margin-bottom: 16px; color: var(--ember-2); }
+.ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 12px; }
+.ticket-row span:first-child { color: var(--muted); }
+.ticket-row span:last-child { font-family: var(--font-mono); color: var(--paper); font-weight: 600; }
+
+.btn-group { display: flex; gap: 12px; margin-top: 16px; }
+.btn-group .btn { flex: 1; justify-content: center; padding: 16px; font-size: 14px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 980px) {
+  .reg-layout {
+    grid-template-columns: 1fr;
+    height: auto; overflow: visible;
+  }
+  .reg-left {
+    position: relative; top: 0; height: auto; overflow: visible;
+    padding: 52px 32px 44px;
+  }
+  .reg-right {
+    height: auto; overflow: visible;
+    padding: 48px 32px 72px;
+  }
+}
+@media (max-width: 640px) {
+  .reg-left { padding: 44px 20px 36px; }
+  .reg-right { padding: 40px 20px 60px; }
+  .form-card { padding: 28px 20px; }
+  .field-row { grid-template-columns: 1fr; }
+  .reg-heading { font-size: 32px; }
+  .reg-countdown { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ GLOBAL UI (no loader on sub-pages) ============ -->
+<canvas id="sparkCanvas"></canvas>
+<div id="cursorGlow"></div>
+<div id="ignitionMeter"></div>
+
+<!-- ============ NAV ============ -->
+<header>
+  <div class="nav-glass">
+    <nav class="wrap">
+      <a href="index.html" class="logo">
+        <span class="mark"></span>INSPIRE X <span class="season-tag">S02</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#speakers">Speakers</a>
+        <a href="index.html#schedule">Schedule</a>
+        <a href="index.html#team">Team</a>
+        <a href="index.html#faq">FAQ</a>
+      </div>
+      <a href="index.html" class="nav-cta" style="background:var(--ink-card-hi); color:var(--paper); border:1px solid var(--line-hi);">
+        ← Back to Event
+      </a>
+      <button class="burger" id="burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#speakers">Speakers</a>
+    <a href="index.html#schedule">Schedule</a>
+    <a href="index.html#team">Team</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html" class="nav-cta" style="background:var(--ink-card-hi);color:var(--paper);border:1px solid var(--line-hi);">← Back to Event</a>
+  </div>
+</header>
+
+<!-- ============ MAIN SPLIT LAYOUT ============ -->
+<main class="reg-layout">
+
+  <!-- ── LEFT: BRANDING PANEL ── -->
+  <div class="reg-left">
+    <div class="reg-left-content">
+      <div class="reg-brand-logo">
+        <div class="eyebrow">Connect Club Presents</div>
+        <h1 class="reg-heading">
+          Secure<br>Your<br><span>Spot</span>
+        </h1>
+        <p class="reg-subtext">
+          Join 1,000+ students, founders, and thinkers for a day of real talks from people who've actually done it. No theory — just honest stories and sharp ideas.
+        </p>
+      </div>
+
+      <div class="reg-details">
+        <div class="reg-detail-row">
+          <div class="reg-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          </div>
+          <div class="reg-detail-body">
+            <strong>13th September 2026</strong>
+            <span>8:00 AM onwards · One packed day</span>
+          </div>
+        </div>
+        <div class="reg-detail-row">
+          <div class="reg-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 5.5 5 9.5 5 15 12 22 12 22s7-7 7-12.5C19 5.5 16 2 12 2z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          </div>
+          <div class="reg-detail-body">
+            <strong>Vardhaman College of Engineering</strong>
+            <span>Hyderabad, Telangana</span>
+          </div>
+        </div>
+        <div class="reg-detail-row">
+          <div class="reg-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+          </div>
+          <div class="reg-detail-body">
+            <strong>Participation Certificate</strong>
+            <span>Issued digitally to all attendees</span>
+          </div>
+        </div>
+        <div class="reg-detail-row">
+          <div class="reg-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="reg-detail-body">
+            <strong>Open to All Students</strong>
+            <span>Any college, any branch, any year</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini countdown -->
+      <div>
+        <p style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--muted-2);text-transform:uppercase;margin-bottom:12px;">Event starts in</p>
+        <div class="reg-countdown" aria-label="Countdown to event">
+          <div class="reg-count-box"><span class="num" id="cd-days">00</span><div class="lbl">Days</div></div>
+          <div class="reg-count-box"><span class="num" id="cd-hours">00</span><div class="lbl">Hrs</div></div>
+          <div class="reg-count-box"><span class="num" id="cd-mins">00</span><div class="lbl">Mins</div></div>
+          <div class="reg-count-box"><span class="num" id="cd-secs">00</span><div class="lbl">Secs</div></div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ── RIGHT: FORM PANEL ── -->
+  <div class="reg-right">
+    <div class="reg-form-wrap">
+      <div class="reg-form-eyebrow">
+      <div class="reg-form-eyebrow">
+        <div class="eyebrow">Registration Wizard</div>
+        <h2 class="reg-form-title">Secure Your Spot</h2>
+        <p class="reg-form-sub" id="formSubtitle">Complete the steps below to register.</p>
+      </div>
+
+      <!-- Form card -->
+      <div class="form-card">
+        
+        <!-- Progress Bar -->
+        <div class="wizard-progress" id="wizardProgress">
+          <div class="wizard-step-dot active" id="dot-1">1</div>
+          <div class="wizard-step-dot" id="dot-2">2</div>
+          <div class="wizard-step-dot" id="dot-3">3</div>
+          <div class="wizard-step-dot" id="dot-4">4</div>
+        </div>
+
+        <!-- STEP 1: DETAILS -->
+        <div class="wizard-step active" id="step-1">
+          <form id="regForm" novalidate>
+            <div class="field-row" style="margin-bottom:0">
+              <div class="field" id="field-fname">
+                <label for="fname">Full Name *</label>
+                <input id="fname" type="text" placeholder="Your full name" autocomplete="name" required>
+                <span class="field-error">Please enter your name</span>
+              </div>
+              <div class="field" id="field-roll">
+                <label for="roll">Roll Number *</label>
+                <input id="roll" type="text" placeholder="e.g. 21VE1A0501" required>
+                <span class="field-error">Enter roll number</span>
+              </div>
+            </div>
+
+            <div class="field-row" style="margin-bottom:0">
+              <div class="field" id="field-email">
+                <label for="email">Email Address *</label>
+                <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                <span class="field-error">Enter a valid email</span>
+              </div>
+              <div class="field" id="field-phone">
+                <label for="phone">Phone Number *</label>
+                <input id="phone" type="tel" placeholder="10-digit number" autocomplete="tel" required>
+                <span class="field-error">Enter 10 digits</span>
+              </div>
+            </div>
+
+            <div class="field-row" style="margin-bottom:0">
+              <div class="field" id="field-college">
+                <label for="college">College Name *</label>
+                <input id="college" type="text" placeholder="e.g. Vardhaman College" required>
+                <span class="field-error">Enter your college</span>
+              </div>
+              <div class="field" id="field-branch">
+                <label for="branch">Branch *</label>
+                <input id="branch" type="text" placeholder="e.g. CSE" required>
+                <span class="field-error">Enter your branch</span>
+              </div>
+            </div>
+            
+            <div class="field" id="field-year">
+              <label for="year">Year of Study *</label>
+              <select id="year" required>
+                <option value="">Select year</option>
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+                <option>Other / Working</option>
+              </select>
+              <span class="field-error">Select your year</span>
+            </div>
+
+            <!-- Registration Type Toggle -->
+            <label style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: block;">Registration Type *</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="regType" value="solo" checked onchange="toggleGroupLogic()">
+                Register Solo
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="regType" value="group" onchange="toggleGroupLogic()">
+                Register as Group
+              </label>
+            </div>
+
+            <!-- Group Logic Container -->
+            <div id="groupLogicWrap">
+              <div class="radio-group" style="margin-bottom: 12px;">
+                <label class="radio-label" style="font-size: 11px; padding: 8px;">
+                  <input type="radio" name="groupAction" value="create" checked onchange="handleGroupAction()">
+                  Create New Group
+                </label>
+                <label class="radio-label" style="font-size: 11px; padding: 8px;">
+                  <input type="radio" name="groupAction" value="join" onchange="handleGroupAction()">
+                  Join Existing
+                </label>
+              </div>
+              
+              <div class="field" id="field-groupCode" style="display: none;">
+                <input id="groupCodeInput" type="text" placeholder="Enter Group Code (e.g. GRP-1234)">
+                <span class="field-error" id="groupCodeError">Invalid Group Code</span>
+              </div>
+              <div class="group-status" id="groupStatusDisplay">Create a group to unlock a free 6th ticket!</div>
+            </div>
+
+            <div class="price-display">
+              <div style="font-size:12px; color:var(--muted);">Total Amount Payable</div>
+              <div class="price-val" id="priceDisplay">₹499</div>
+            </div>
+
+            <button type="button" class="btn btn-primary submit-btn" id="btnNext1">
+              Next Step: Review Details
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- STEP 2: REVIEW -->
+        <div class="wizard-step" id="step-2">
+          <div class="review-list">
+            <div class="review-item"><span>Full Name</span><span id="rev-name"></span></div>
+            <div class="review-item"><span>Roll Number</span><span id="rev-roll"></span></div>
+            <div class="review-item"><span>Email</span><span id="rev-email"></span></div>
+            <div class="review-item"><span>Phone</span><span id="rev-phone"></span></div>
+            <div class="review-item"><span>College</span><span id="rev-college"></span></div>
+            <div class="review-item"><span>Branch & Year</span><span id="rev-branch"></span></div>
+            <div class="review-item" id="rev-group-row"><span>Group Code</span><span id="rev-group" style="color:var(--volt);"></span></div>
+          </div>
+          
+          <div class="price-display" style="background:var(--ink-soft); border-color:var(--line-hi);">
+            <div style="font-size:12px; color:var(--muted);">Final Amount to Pay</div>
+            <div class="price-val" id="finalPriceDisplay">₹499</div>
+          </div>
+
+          <div class="btn-group">
+            <button type="button" class="btn secondary-btn" id="btnBack2">Edit Details</button>
+            <button type="button" class="btn btn-primary" id="btnNext2">Proceed to Payment</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: PAYMENT -->
+        <div class="wizard-step" id="step-3">
+          <div class="mock-payment">
+            <h3 style="font-family:var(--font-display); font-size:18px; margin-bottom:8px;">Scan to Pay</h3>
+            <p style="font-size:13px; color:var(--muted); margin-bottom:20px;">Use any UPI app to complete the transaction.</p>
+            <div class="mock-qr">
+              <!-- Placeholder QR Code -->
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+                <rect width="100" height="100" fill="#fff"/>
+                <path d="M10 10h30v30H10V10zm10 10h10v10H20V20zM60 10h30v30H60V10zm10 10h10v10H70V20zM10 60h30v30H10V60zm10 10h10v10H20V70zM50 50h10v10H50V50zm20 0h10v10H70V50zm-20 20h10v10H50V70zm20 20h10v10H70V90zm10-20h10v10H80V70zm10-20h10v10H90V50zm0 40h10v10H90V90z" fill="#000"/>
+              </svg>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:12px; font-weight:700;">UPI: inspirex@upi</div>
+          </div>
+          <button type="button" class="btn btn-primary submit-btn" id="btnPayNow">
+            I have paid <span id="payBtnAmount">₹499</span>
+          </button>
+        </div>
+
+        <!-- STEP 4: CONFIRMATION -->
+        <div class="wizard-step" id="step-4">
+          <div class="success-icon" style="margin: 0 auto 20px; animation: none; transform: scale(1); opacity:1;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <h3 style="text-align:center; font-family:var(--font-display); font-size:24px; margin-bottom:24px;">Registration Successful!</h3>
+          
+          <div class="ticket-card">
+            <div class="ticket-header">INSPIRE X — S02</div>
+            <div class="ticket-row"><span>Attendee</span><span id="ticket-name"></span></div>
+            <div class="ticket-row"><span>Registration ID</span><span id="ticket-id" style="color:var(--volt);"></span></div>
+            <div class="ticket-row" id="ticket-group-row"><span>Group Code</span><span id="ticket-group"></span></div>
+            <div class="ticket-row"><span>Price Paid</span><span id="ticket-price"></span></div>
+            <div class="ticket-row"><span>Event Date</span><span>13 Sep 2026</span></div>
+          </div>
+
+          <div class="btn-group" style="flex-direction: column;">
+            <button type="button" class="btn btn-primary" onclick="alert('Ticket PDF would download here.')">Download Ticket</button>
+            <button type="button" class="btn secondary-btn" id="btnRegisterAnother">Register Another Member</button>
+          </div>
+        </div>
+
+      </div><!-- /form-card -->
+
+    </div><!-- /reg-form-wrap -->
+  </div><!-- /reg-right -->
+
+</main>
+<script src="main.js"></script>
+<script>
+  // Expose group logic functions globally for inline onchange handlers
+  window.toggleGroupLogic = toggleGroupLogic;
+  window.handleGroupAction = handleGroupAction;
+
+  const BASE_PRICE = 499;
+  let currentStep = 1;
+  let isGroup = false;
+  let finalPrice = BASE_PRICE;
+  let currentGroupCode = null;
+  let regId = null;
+
+  // Local Storage Database Simulation
+  function getGroupsDB() {
+    return JSON.parse(localStorage.getItem('inspireX_groups') || '{}');
+  }
+  function saveGroupsDB(db) {
+    localStorage.setItem('inspireX_groups', JSON.stringify(db));
+  }
+  function generateGroupCode() {
+    return 'GRP-' + Math.floor(1000 + Math.random() * 9000);
+  }
+  function generateRegId() {
+    return 'REG-' + Math.floor(10000 + Math.random() * 90000);
+  }
+
+  // --- UI Updates ---
+  function goToStep(step) {
+    document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+    document.getElementById('step-' + step).classList.add('active');
+    
+    // Update progress dots
+    for(let i=1; i<=4; i++) {
+      let dot = document.getElementById('dot-' + i);
+      dot.classList.remove('active', 'completed');
+      if (i < step) dot.classList.add('completed');
+      else if (i === step) dot.classList.add('active');
+    }
+    currentStep = step;
+    
+    if (step === 2) populateReview();
+    if (step === 3) handlePaymentStep();
+    if (step === 4) generateTicket();
+  }
+
+  // --- Group Logic ---
+  function toggleGroupLogic() {
+    const regType = document.querySelector('input[name="regType"]:checked').value;
+    const wrap = document.getElementById('groupLogicWrap');
+    isGroup = (regType === 'group');
+    
+    if (isGroup) {
+      wrap.style.display = 'block';
+      handleGroupAction(); // refresh logic
+    } else {
+      wrap.style.display = 'none';
+      finalPrice = BASE_PRICE;
+      currentGroupCode = null;
+      updatePriceDisplay();
+    }
+  }
+
+  function handleGroupAction() {
+    const action = document.querySelector('input[name="groupAction"]:checked').value;
+    const codeField = document.getElementById('field-groupCode');
+    const status = document.getElementById('groupStatusDisplay');
+    const codeInput = document.getElementById('groupCodeInput');
+    
+    if (action === 'create') {
+      codeField.style.display = 'none';
+      status.textContent = 'A new Group Code will be generated after payment.';
+      status.style.color = 'var(--muted)';
+      finalPrice = BASE_PRICE;
+      currentGroupCode = null;
+      updatePriceDisplay();
+    } else {
+      codeField.style.display = 'flex';
+      status.textContent = 'Enter code to check status.';
+      status.style.color = 'var(--muted)';
+      codeInput.value = '';
+      finalPrice = BASE_PRICE;
+      updatePriceDisplay();
+    }
+  }
+
+  // Live validate group code
+  const codeInput = document.getElementById('groupCodeInput');
+  if (codeInput) {
+    codeInput.addEventListener('input', function() {
+      if (document.querySelector('input[name="groupAction"]:checked').value !== 'join') return;
+      
+      const code = this.value.trim().toUpperCase();
+      const errorSpan = document.getElementById('groupCodeError');
+      const status = document.getElementById('groupStatusDisplay');
+      
+      if (code.length < 8) {
+        document.getElementById('field-groupCode').classList.remove('has-error', 'is-valid');
+        status.textContent = 'Enter code to check status.';
+        status.style.color = 'var(--muted)';
+        finalPrice = BASE_PRICE;
+        updatePriceDisplay();
+        return;
+      }
+
+      const db = getGroupsDB();
+      if (db[code]) {
+        document.getElementById('field-groupCode').classList.remove('has-error');
+        document.getElementById('field-groupCode').classList.add('is-valid');
+        currentGroupCode = code;
+        
+        let members = db[code].members || 1;
+        let needed = 5 - members;
+        
+        if (members >= 5) {
+          status.textContent = '🎉 Your ticket is FREE! You are the 6th member!';
+          status.style.color = 'var(--volt)';
+          finalPrice = 0;
+        } else {
+          status.textContent = `${members}/5 members joined — ${needed} more to unlock a free ticket!`;
+          status.style.color = 'var(--ember-2)';
+          finalPrice = BASE_PRICE;
+        }
+      } else {
+        document.getElementById('field-groupCode').classList.remove('is-valid');
+        document.getElementById('field-groupCode').classList.add('has-error');
+        errorSpan.textContent = 'Group not found.';
+        status.textContent = '';
+        currentGroupCode = null;
+        finalPrice = BASE_PRICE;
+      }
+      updatePriceDisplay();
+    });
+  }
+
+  function updatePriceDisplay() {
+    const disp = document.getElementById('priceDisplay');
+    if (finalPrice === 0) {
+      disp.textContent = '₹0 (FREE)';
+      disp.classList.add('free');
+    } else {
+      disp.textContent = '₹' + finalPrice;
+      disp.classList.remove('free');
+    }
+  }
+
+  // --- Validation ---
+  const rules = {
+    fname: v => v.trim().length >= 2,
+    roll: v => v.trim().length >= 5,
+    email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+    phone: v => /^[0-9]{10}$/.test(v.replace(/\s/g,'')),
+    college: v => v.trim().length >= 2,
+    branch: v => v.trim().length >= 2,
+    year: v => v !== ''
+  };
+
+  function validateField(id) {
+    const el = document.getElementById(id);
+    const wrap = document.getElementById('field-' + id);
+    if (!el || !wrap || !rules[id]) return true;
+    const ok = rules[id](el.value);
+    wrap.classList.toggle('has-error', !ok);
+    wrap.classList.toggle('is-valid', ok);
+    return ok;
+  }
+
+  // Live validation listeners
+  Object.keys(rules).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+      el.addEventListener('blur', () => validateField(id));
+      el.addEventListener('input', () => {
+        const w = document.getElementById('field-' + id);
+        if(w && w.classList.contains('has-error')) validateField(id);
+      });
+    }
+  });
+
+  // --- Step 1 to 2 ---
+  document.getElementById('btnNext1').addEventListener('click', () => {
+    let allOk = Object.keys(rules).map(validateField).every(Boolean);
+    
+    // Validate group join input
+    if (isGroup && document.querySelector('input[name="groupAction"]:checked').value === 'join') {
+      const gcw = document.getElementById('field-groupCode');
+      if (!currentGroupCode) {
+        gcw.classList.add('has-error');
+        document.getElementById('groupCodeError').textContent = 'Valid code required to join.';
+        allOk = false;
+      }
+    }
+
+    if (allOk) goToStep(2);
+  });
+
+  function populateReview() {
+    document.getElementById('rev-name').textContent = document.getElementById('fname').value;
+    document.getElementById('rev-roll').textContent = document.getElementById('roll').value;
+    document.getElementById('rev-email').textContent = document.getElementById('email').value;
+    document.getElementById('rev-phone').textContent = document.getElementById('phone').value;
+    document.getElementById('rev-college').textContent = document.getElementById('college').value;
+    document.getElementById('rev-branch').textContent = document.getElementById('branch').value + ' - ' + document.getElementById('year').value;
+    
+    const grow = document.getElementById('rev-group-row');
+    if (isGroup) {
+      grow.style.display = 'flex';
+      const action = document.querySelector('input[name="groupAction"]:checked').value;
+      if (action === 'create') document.getElementById('rev-group').textContent = 'Will generate after payment';
+      else document.getElementById('rev-group').textContent = currentGroupCode;
+    } else {
+      grow.style.display = 'none';
+    }
+
+    const fd = document.getElementById('finalPriceDisplay');
+    fd.textContent = finalPrice === 0 ? '₹0 (FREE)' : '₹' + finalPrice;
+    fd.style.color = finalPrice === 0 ? 'var(--volt)' : 'var(--paper)';
+  }
+
+  document.getElementById('btnBack2').addEventListener('click', () => goToStep(1));
+
+  // --- Step 2 to 3/4 ---
+  document.getElementById('btnNext2').addEventListener('click', () => {
+    if (finalPrice === 0) {
+      finalizeRegistration();
+    } else {
+      goToStep(3);
+    }
+  });
+
+  // --- Step 3 Payment ---
+  function handlePaymentStep() {
+    document.getElementById('payBtnAmount').textContent = '₹' + finalPrice;
+  }
+  document.getElementById('btnPayNow').addEventListener('click', () => {
+    const btn = document.getElementById('btnPayNow');
+    btn.classList.add('loading');
+    btn.innerHTML = 'Verifying Payment...';
+    setTimeout(() => {
+      btn.classList.remove('loading');
+      finalizeRegistration();
+    }, 1200);
+  });
+
+  // --- Finalize & Step 4 ---
+  function finalizeRegistration() {
+    regId = generateRegId();
+    
+    // Update DB
+    if (isGroup) {
+      const db = getGroupsDB();
+      const action = document.querySelector('input[name="groupAction"]:checked').value;
+      
+      if (action === 'create') {
+        currentGroupCode = generateGroupCode();
+        db[currentGroupCode] = { members: 1 };
+      } else if (action === 'join' && currentGroupCode) {
+        if (!db[currentGroupCode]) db[currentGroupCode] = { members: 0 };
+        db[currentGroupCode].members += 1;
+      }
+      saveGroupsDB(db);
+    }
+
+    goToStep(4);
+  }
+
+  function generateTicket() {
+    document.getElementById('ticket-name').textContent = document.getElementById('fname').value;
+    document.getElementById('ticket-id').textContent = regId;
+    
+    const trow = document.getElementById('ticket-group-row');
+    if (isGroup && currentGroupCode) {
+      trow.style.display = 'flex';
+      document.getElementById('ticket-group').textContent = currentGroupCode;
+    } else {
+      trow.style.display = 'none';
+    }
+
+    document.getElementById('ticket-price').textContent = finalPrice === 0 ? '₹0 (Free 6th Ticket)' : '₹' + finalPrice;
+
+    // Confetti
+    if (window.ix_spawn) {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      for (let i = 0; i < 40; i++) window.ix_spawn(cx + (Math.random()-0.5)*200, cy + (Math.random()-0.5)*200, 1);
+    }
+  }
+
+  document.getElementById('btnRegisterAnother').addEventListener('click', () => {
+    document.getElementById('regForm').reset();
+    document.querySelectorAll('.field').forEach(el => el.classList.remove('is-valid', 'has-error'));
+    
+    // If they were in a group, pre-select join group
+    if (isGroup && currentGroupCode) {
+      document.querySelector('input[name="regType"][value="group"]').checked = true;
+      toggleGroupLogic();
+      document.querySelector('input[name="groupAction"][value="join"]').checked = true;
+      handleGroupAction();
+      const cin = document.getElementById('groupCodeInput');
+      cin.value = currentGroupCode;
+      // trigger input event to re-validate group and update price
+      cin.dispatchEvent(new Event('input')); 
+    } else {
+      document.querySelector('input[name="regType"][value="solo"]').checked = true;
+      toggleGroupLogic();
+    }
+    
+    goToStep(1);
+  });
+
+  // Init
+  toggleGroupLogic();
+</script>
+</body>
+</html>
